@@ -20,11 +20,14 @@ use Carp;
 use Data::Dumper;
 use POSIX qw(strftime mktime);
 use Getopt::Long;
+use English '-no_match_vars';
+use Term::ReadKey qw(ReadMode ReadKey);
 
 my $host     = '127.0.0.1';
 my $port     = 3306;
 my $user     = 'monitor';
 my $password = '';
+my $askpass  = 0;
 my $database = 'information_schema';
 my $debug    = 0;
 my $help     = 0;
@@ -35,11 +38,17 @@ GetOptions(
     "port|P=i"     => \$port,
     "user|u=s"     => \$user,
     "password|p=s" => \$password,
+    "askpass!"     => \$askpass,
     "database|d=s" => \$database,
     "charset|c=s"  => \$charset,
     "debug|d!"     => \$debug,
     "help|h!"      => \$help,
 ) or die "error:$!";
+
+if ($askpass) {
+   $password = noecho_password("Enter password ");
+   print "password: $password";
+}
 
 if ( !$password ) {
     warn "Can not connect to MySQL without password.";
@@ -56,6 +65,31 @@ sub usage {
 if ($help) {
     usage($0);
 }
+
+# Prompt for password when connecting to MySQL
+sub noecho_password {
+    my $prompt = shift;
+    local $OUTPUT_AUTOFLUSH = 1;
+    my $response;
+    eval {
+        if ($OSNAME =~ m/MSWin/) {
+            require Win32::Console::ANSI;
+        }
+        print "$prompt: ";
+        ReadMode('noecho');
+        $response = <STDIN>;
+        chomp($response);
+        ReadMode('normal');
+        print "\n" or die 
+            "Cannot print: $OS_ERROR";
+    };
+    if ($EVAL_ERROR) {
+        die "Cannot read respose; is Term::ReadKey installed? $EVAL_ERROR";
+    }
+    return $response;
+}
+
+
 
 sub print_repl {
     my ( $host_info, $level ) = @_;
