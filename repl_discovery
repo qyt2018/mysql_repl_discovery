@@ -21,17 +21,6 @@ use Data::Dumper;
 use POSIX qw(strftime mktime);
 use Getopt::Long;
 
-BEGIN {
-    $INC{$_} = __FILE__
-      for map { ( my $pkg = "$_.pm" ) =~ s!::!/!g; $pkg } (
-        qw(
-          Sender
-          )
-      );
-}
-
-use constant SCRIPT_CONF => '/etc/masterha/masterha-script.cnf';
-
 my $host     = '127.0.0.1';
 my $port     = 3306;
 my $user     = 'monitor';
