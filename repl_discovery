@@ -159,21 +159,22 @@ my ( $dbhelper, $master_host, $master_port ) = find_top_master(
     $host,   $port, $user, $password, $database, $charset,
     'mysql', 4,     \%host_find
 );
-if ( defined $dbhelper ) {
+if ( $master_host ) {
     $dbhelper->get_slave_by_master(
         $master_host, $master_port, $database,
         $user,        $password,    \%hosts_repl
     );
 }
 else {
-    print "Can't find top master, maybe multi master in your env:\n"
-      . Data::Dumper->Dump( [ \%host_find ], [qw(host_find)] );
+    print "Can't find top master, maybe multi master in your env:\n";
     foreach my $hostlist ( keys %host_find ) {
         my ( $h, $p ) = split( /:/, $hostlist, 2 );
         my $dbhelper =
           get_dbhelper( $h, $p, $user, $password, $database, $charset,
             'mysql' );
         my $dbinfo = $dbhelper->get_common_info();
+        $dbinfo->{filter} = $dbhelper->get_master_filter();
+        $dbinfo->{server} = "$h:$p";
         print Data::Dumper->Dump( [$dbinfo], [qw($hostlist)] );
     }
 }
