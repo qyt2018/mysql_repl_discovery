@@ -164,14 +164,6 @@ if ( defined $dbhelper ) {
         $master_host, $master_port, $database,
         $user,        $password,    \%hosts_repl
     );
-    foreach my $hostlist ( keys %host_find ) {
-        my ( $h, $p ) = split( /:/, $hostlist, 2 );
-        my $dbhelper =
-          get_dbhelper( $h, $p, $user, $password, $database, $charset,
-            'mysql' );
-        my $dbinfo = $dbhelper->get_common_info();
-        print Data::Dumper->Dump( [$dbinfo], [qw($hostlist)] );
-    }
 }
 else {
     print "Can't find top master, maybe multi master in your env:\n"
