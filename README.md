@@ -15,7 +15,17 @@ Read more with ```perldoc repl_discovery``` or ```perl repl_discovery --help```
   `repl_discovery` can get the master, slave status,  common info(server_id, binlog, filter ...) 
 and check repl health.
 
-## Todo
+Notice: Current version don't support different port in master and slaves.
 
- 1. Multi master check
- 2. hierarchical level check
+##TODO
+
+1. master and slave have different port.
+
+## changelog:
+
+v0.1.0: init version
+
+v0.1.1: recurion find top master;
+        support hierarchical level check;
+        support multi master check;
+
