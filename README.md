@@ -6,6 +6,7 @@ A simple tool for discover MySQL replication topology.
 ```
 DBI
 DBD::mysql
+perl-TermReadKey
 ```
 
 ## How to use
@@ -16,6 +17,10 @@ Read more with ```perldoc repl_discovery``` or ```perl repl_discovery --help```
 and check repl health.
 
 Notice: Current version don't support different port in master and slaves.
+
+# RPM
+
+`repl_discovery.spec`
 
 ##TODO
 
