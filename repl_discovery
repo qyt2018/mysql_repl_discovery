@@ -18,7 +18,6 @@ use strict;
 use warnings FATAL => 'all';
 use Carp;
 use Data::Dumper;
-use POSIX qw(strftime mktime);
 use Getopt::Long;
 use English '-no_match_vars';
 use Term::ReadKey qw(ReadMode ReadKey);
@@ -31,6 +30,7 @@ my $askpass  = 0;
 my $database = 'information_schema';
 my $debug    = 0;
 my $help     = 0;
+my $recurse  = 0;
 my $charset  = 'utf8';
 
 GetOptions(
@@ -43,7 +43,18 @@ GetOptions(
     "charset|c=s"  => \$charset,
     "debug|d!"     => \$debug,
     "help|h!"      => \$help,
+    "recurse|r!"   => \$recurse,
 ) or die "error:$!";
+
+if ($help) {
+    usage($0);
+}
+
+sub usage {
+    my $name = shift;
+    system("perldoc $name");
+    exit 0;
+}
 
 if ($askpass) {
    $password = noecho_password("Enter password ");
@@ -53,16 +64,6 @@ if ( !$password ) {
     warn "Can not connect to MySQL without password.";
     usage($0);
     exit 1;
-}
-
-sub usage {
-    my $name = shift;
-    system("perldoc $name");
-    exit 0;
-}
-
-if ($help) {
-    usage($0);
 }
 
 # Prompt for password when connecting to MySQL
@@ -184,7 +185,7 @@ my ( $dbhelper, $master_host, $master_port ) = find_top_master(
 if ( $master_host ) {
     $dbhelper->get_slave_by_master(
         $master_host, $master_port, $database,
-        $user,        $password,    \%hosts_repl
+        $user,        $password,    \%hosts_repl, $recurse
     );
 }
 else {
@@ -249,6 +250,10 @@ print debug info.
 =item help | h
 
 print help info.
+
+=item recurse | r
+
+whether recursion find slave or not, defaults no.
 
 =back
 
@@ -793,7 +798,7 @@ sub get_common_info($) {
 
 }
 
-sub get_slave_by_master($$$$$$$) {
+sub get_slave_by_master($$$$$$$$) {
     my $self       = shift;
     my $host       = shift;
     my $port       = shift;
@@ -801,6 +806,7 @@ sub get_slave_by_master($$$$$$$) {
     my $user       = shift;
     my $password   = shift;
     my $hosts_hash = shift;
+    my $recurse    = shift;
     my %status     = ();
 
     my $dbpre = Repl::dbh->new(
@@ -875,8 +881,9 @@ sub get_slave_by_master($$$$$$$) {
                 find_key_from_array(
                     $hosts_hash->{"$host:$port"},
                     "$slave:$port"
-                )
-            );
+                ),
+                $recurse
+            ) if $recurse;
         }
 
     }
