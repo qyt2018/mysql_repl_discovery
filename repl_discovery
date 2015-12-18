@@ -888,6 +888,7 @@ sub find_key_from_array {
     my $i         = 0;
     foreach ( @{ $array_ref->{slave} } ) {
         my ( $k, $v ) = each %$_;
+        return $array_ref unless defined $k;
         if ( $k eq $key ) {
             return $array_ref->{slave}->[$i];
         }
