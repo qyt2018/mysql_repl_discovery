@@ -847,6 +847,7 @@ sub get_slave_by_master($$$$$$$$) {
         }
         $self->{dbh} = $dbh_s;
         my %status_slave = $self->check_slave_status();
+        return unless defined $status_slave{Slave_SQL_Running};
         my @down_threads = Repl::DBHelper::get_threads_util($dbh_s);
 
         # slave has no slave.
