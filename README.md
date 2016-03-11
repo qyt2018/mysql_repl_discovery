@@ -6,7 +6,7 @@ A simple tool for discover MySQL replication topology.
 ```
 DBI
 DBD::mysql
-perl-TermReadKey
+perl-TermReadKey (if enable askpass option)
 ```
 
 ## How to use
@@ -24,7 +24,60 @@ Notice: Current version don't support different port in master and slaves.
 
 ##TODO
 
-1. master and slave have different port.
+1. master and slave have different port( not support ).
+
+# Usage
+
+### hostname:
+`
+cz-test2: 10.0.21.7  (slave)
+cz-test3: 10.0.21.17 (master)
+`
+specify master or slave ip address or hostname
+```
+$ perl repl_discovery --host 10.0.21.17 --port 3303 --user monitor --askpass
+Enter password : 
++-10.0.21.17:3303
+version             5.5.36-34.1-rel34.1-log
+server_id           68839
+has_gtid            Not Support
+binlog_enable       1
+filter              binlog_ignore_db: information_schema,mysql,performance_schema,test; 
+binlog_format       ROW
+max_packet          32MB
+read_only           0
+  +-10.0.21.7:3303
+  version             5.5.36-34.1-rel34.1-log
+  server_id           462055
+  has_gtid            Not Support
+  binlog_enable       1
+  filter              replicate_ignore_db: information_schema,mysql,performance_schema,test; 
+  binlog_format       ROW
+  max_packet          32MB
+  read_only           1
+  repl_check          OK
+$ perl repl_discovery --host 10.0.21.7 --port 3303 --user monitor --askpass
+Enter password : 
++-10.0.21.17:3303
+version             5.5.36-34.1-rel34.1-log
+server_id           68839
+has_gtid            Not Support
+binlog_enable       1
+filter              binlog_ignore_db: information_schema,mysql,performance_schema,test; 
+binlog_format       ROW
+max_packet          32MB
+read_only           0
+  +-10.0.21.7:3303
+  version             5.5.36-34.1-rel34.1-log
+  server_id           462055
+  has_gtid            Not Support
+  binlog_enable       1
+  filter              replicate_ignore_db: information_schema,mysql,performance_schema,test; 
+  binlog_format       ROW
+  max_packet          32MB
+  read_only           1
+  repl_check          OK
+```
 
 ## changelog:
 
