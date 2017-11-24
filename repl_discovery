@@ -33,7 +33,7 @@ my $recurse  = 0;
 my $charset  = 'utf8';
 
 GetOptions(
-    "host|H=s"     => \$host,
+    "host|h=s"     => \$host,
     "port|P=i"     => \$port,
     "user|u=s"     => \$user,
     "password|p=s" => \$password,
@@ -41,7 +41,7 @@ GetOptions(
     "database|d=s" => \$database,
     "charset|c=s"  => \$charset,
     "debug|d!"     => \$debug,
-    "help|h!"      => \$help,
+    "help!"        => \$help,
     "recurse|r!"   => \$recurse,
 ) or die "error:$!";
 
@@ -61,7 +61,6 @@ if ($askpass) {
 
 if ( !$password ) {
     warn "Can not connect to MySQL without password.";
-    usage($0);
     exit 1;
 }
 
