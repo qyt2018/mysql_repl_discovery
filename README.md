@@ -41,6 +41,7 @@ Enter password :
 version             5.5.36-34.1-rel34.1-log
 server_id           68839
 has_gtid            Not Support
+tx_isolation        REPEATABLE-READ
 binlog_enable       1
 filter              binlog_ignore_db: information_schema,mysql,performance_schema,test; 
 binlog_format       ROW
@@ -50,6 +51,7 @@ read_only           0
   version             5.5.36-34.1-rel34.1-log
   server_id           462055
   has_gtid            Not Support
+  tx_isolation        REPEATABLE-READ
   binlog_enable       1
   filter              replicate_ignore_db: information_schema,mysql,performance_schema,test; 
   binlog_format       ROW
@@ -62,6 +64,7 @@ Enter password :
 version             5.5.36-34.1-rel34.1-log
 server_id           68839
 has_gtid            Not Support
+tx_isolation        REPEATABLE-READ
 binlog_enable       1
 filter              binlog_ignore_db: information_schema,mysql,performance_schema,test; 
 binlog_format       ROW
@@ -71,6 +74,7 @@ read_only           0
   version             5.5.36-34.1-rel34.1-log
   server_id           462055
   has_gtid            Not Support
+  tx_isolation        REPEATABLE-READ
   binlog_enable       1
   filter              replicate_ignore_db: information_schema,mysql,performance_schema,test; 
   binlog_format       ROW
