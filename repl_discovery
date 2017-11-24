@@ -791,7 +791,7 @@ sub get_common_info($) {
     };
     $common_hash{binlog_format} = $self->show_variable("binlog_format");
     $common_hash{binlog_enable} = $self->is_binlog_enabled();
-    $common_hash{tx_isolation}  = $self->show_variable("binlog_format");
+    $common_hash{tx_isolation}  = $self->show_variable("tx_isolation");
     $common_hash{max_packet}    =
         $self->get_max_allowed_packet() / 1024 / 1024 . 'MB';
 
