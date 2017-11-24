@@ -99,8 +99,8 @@ sub print_repl {
         my $str = "";
         $str .= " " x ( 2 * $level ) . "+-$host\n";
         for my $key (
-            qw(version server_id has_gtid binlog_enable filter
-            binlog_format max_packet read_only repl_check)
+            qw(version server_id has_gtid binlog_enable tx_isolation
+            filter binlog_format max_packet read_only repl_check)
           )
         {
             $str .=
@@ -791,8 +791,9 @@ sub get_common_info($) {
     };
     $common_hash{binlog_format} = $self->show_variable("binlog_format");
     $common_hash{binlog_enable} = $self->is_binlog_enabled();
-    $common_hash{max_packet} =
-      $self->get_max_allowed_packet() / 1024 / 1024 . 'MB';
+    $common_hash{tx_isolation}  = $self->show_variable("binlog_format");
+    $common_hash{max_packet}    =
+        $self->get_max_allowed_packet() / 1024 / 1024 . 'MB';
 
     return \%common_hash;
 
